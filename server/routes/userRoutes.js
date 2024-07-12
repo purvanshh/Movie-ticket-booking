@@ -1,52 +1,73 @@
 const express = require("express");
 const User = require("../models/userModel");
-const bcrypt = require('bcrypt')
+const bcrypt = require("bcrypt");
+
+
 
 const router = express.Router();
 
 router.post("/register", async (req, res) => {
-    try {
-        const userExists = await User.findOne({email:req.body.email})
-        if(userExists){
-            res.send({
-                success : false,
-                message : "User Already Exists"
-            })
-        }
-        const salt = await bcrypt.genSalt(10)
-        const hashedPassword = await bcrypt.hash(req.body.password , salt)
-        req.body.password = hashedPassword
-        const newUser = new User(req.body)
-        await newUser.save()
+  try {
+    const userExists = await User.findOne({ email: req.body.email });
 
-        res.status(201).json('User Created')
-    } catch (error) {
-        res.json(error)
+    if (userExists) {
+      res.send({
+        success: false,
+        message: "User Already Exists",
+      });
     }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    req.body.password = hashedPassword;
+
+    const newUser = new User(req.body);
+    await newUser.save();
+
+    res.send({
+      success: true,
+      message: "You've successfully signed up, please login now!",
+    });
+  } catch (error) {
+    res.send(error);
+  }
 });
 
 router.post("/login", async (req, res) => {
-    const user = await User.findOne({email : req.body.email})
-    if(!user){
-        res.send({
-            success : false,
-            message : "User Not Found"
-        })
+  try {
+    const user = await User.findOne({ email: req.body.email });
+
+    if (!user) {
+      res.send({
+        success: false,
+        message: "User Does not exist , please register",
+      });
     }
-    if(user){
-        const validPassword = await bcrypt.compare(req.body.password , user.password)
-        if(validPassword){
-            res.send({
-                success : true,
-                message : "User Logged In"
-            })
-        }else{
-            res.send({
-                success : false,
-                message : "Invalid Password"
-            })
-        }
+
+    const validPassword = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
+
+    if (!validPassword) {
+      return res.send({
+        success: false,
+        message: "Invalid Password",
+      });
     }
+
+    // const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+    //   expiresIn: "1d",
+    // });
+
+    res.send({
+      success: true,
+      message: "You've successfully logged in!",
+      // token: token,
+    });
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 
