@@ -27,7 +27,7 @@ function Home() {
             </button>
           </Link>
         </section>
-        <section className="features-section text-center mt-3">
+        {/* <section className="features-section text-center mt-3">
           <div className="feature-item">
             <h3>Latest Movies</h3>
             <p>Stay updated with the latest releases.</p>
@@ -40,7 +40,7 @@ function Home() {
             <h3>Easy Booking</h3>
             <p>Book your tickets effortlessly.</p>
           </div>
-        </section>
+        </section> */}
       </main>
       <footer className="text-center mt-3">
         <p>&copy; 2024 BookMyShow. All Rights Reserved.</p>
