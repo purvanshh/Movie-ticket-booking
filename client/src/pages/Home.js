@@ -11,11 +11,6 @@ function Home() {
         <section className="intro-section text-center">
           <h2>Discover Movies, Shows, and More</h2>
           <p>Experience the best entertainment at your fingertips.</p>
-          <Link to="/login">
-            <button className="login-button">
-              Log Out
-            </button>
-          </Link>
         </section>
       </main>
       <footer className="text-center mt-3">
